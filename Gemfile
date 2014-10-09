@@ -3,6 +3,9 @@ source "http://rubygems.org"
 gemspec
 
 gem 'refinerycms', '~> 2.1.0'
+gem 'refinerycms-calendar', git: 'https://github.com/dannemanne/refinerycms-calendar.git'
+
+gem 'xeroizer', git: 'https://github.com/waynerobinson/xeroizer.git'
 
 # Database Configuration
 platforms :jruby do

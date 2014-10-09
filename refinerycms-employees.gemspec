@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency             'refinerycms-core',            '~> 2.1.2'
   s.add_dependency             'refinerycms-authentication',  '~> 2.1.2'
   s.add_dependency             'refinerycms-calendar',        '~> 2.1'
+  s.add_dependency             'xeroizer'
 
   # Development dependencies (usually used for testing)
   s.add_development_dependency 'refinerycms-testing', '~> 2.1.2'
