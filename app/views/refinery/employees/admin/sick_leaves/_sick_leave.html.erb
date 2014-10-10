@@ -2,7 +2,7 @@
   <span class='title'>
     <%= sick_leave.employee.full_name %>
     <span class="preview">
-      <%= t('.preview', :start_date => l(sick_leave.start_date, :format => :short)) %>
+      <%= t('.preview', :start_date => sick_leave.start_date) %>
     </span>
   </span>
   <span class='actions'>

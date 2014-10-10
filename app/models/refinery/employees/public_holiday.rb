@@ -9,7 +9,8 @@ module Refinery
 
       attr_accessible :holiday_date, :half_day, :country, :title
 
-      validates :event_id,      uniqueness: true, allow_blank: true
+      validates :title,         presence: true
+      validates :event_id,      uniqueness: true, allow_nil: true
       validates :holiday_date,  presence: true, uniqueness: { scope: :country }
       validates :country,       presence: true, inclusion: ::Refinery::Employees::Countries::COUNTRIES
 

@@ -64,7 +64,7 @@
   <script type="text/javascript">
     $(function(){
       $('.js_user_field').autocomplete({
-        source: <%= ::Refinery::User.select(:full_name).map(&:full_name).to_json.html_safe %>
+        source: <%= ::Refinery::User.select(:username).map(&:username).to_json.html_safe %>
       });
       $('.js_xero_guid_field').autocomplete({
         source: <%= (session[:xero_guids] || []).to_json.html_safe %>

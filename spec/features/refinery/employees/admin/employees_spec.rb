@@ -29,10 +29,11 @@ describe Refinery do
 
           context "valid data" do
             it "should succeed" do
-              fill_in "Employee No", :with => "This is a test of the first string field"
+              fill_in "Employee No", :with => "Employee no 001"
+              fill_in "Full Name", :with => "John Doe"
               click_button "Save"
 
-              page.should have_content("'This is a test of the first string field' was successfully added.")
+              page.should have_content("'Employee no 001' was successfully added.")
               Refinery::Employees::Employee.count.should == 1
             end
           end

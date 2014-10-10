@@ -22,7 +22,7 @@ module Refinery
 
       before_validation do
         if @user_name.present?
-          if (user = ::Refinery::User.find_by_full_name(@user_name)).present?
+          if (user = ::Refinery::User.find_by_username(@user_name)).present?
             self.user = user
           end
         end
@@ -36,7 +36,7 @@ module Refinery
       end
 
       def user_name
-        @user_name ||= user.try(:full_name)
+        @user_name ||= user.try(:username)
       end
 
       def xero_guid_field

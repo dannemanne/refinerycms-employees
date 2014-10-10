@@ -13,7 +13,9 @@
               <%= image_tag('user_unknown.png', class: 'profile-picture') %>
             <% end %>
             <h5 class="name"><%= employee.full_name %></h5>
-            <p><%= employee.title.upcase %></p>
+            <% if employee.title.present? %>
+              <p><%= employee.title.upcase %></p>
+            <% end %>
           </div>
         </li>
 

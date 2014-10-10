@@ -2,7 +2,7 @@
   <span class='title'>
     <%= annual_leave.employee.full_name %>
     <span class="preview">
-      <%= t('.preview', number_of_days: annual_leave.number_of_days, :start_date => l(annual_leave.start_date, :format => :short)) %>
+      <%= t('.preview', number_of_days: annual_leave.number_of_days, :start_date => annual_leave.start_date) %>
     </span>
   </span>
   <span class='actions'>
