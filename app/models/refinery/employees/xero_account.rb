@@ -8,7 +8,7 @@ module Refinery
       attr_accessible :code, :guid, :name
 
       validates :guid,    presence: true, uniqueness: true
-      validates :code,    presence: true, uniqueness: true
+      validates :code,    presence: true, uniqueness: { scope: :inactive }, unless: :inactive
       validates :name,    presence: true
 
       def code_and_name

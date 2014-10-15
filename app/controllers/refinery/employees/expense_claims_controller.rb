@@ -40,9 +40,10 @@ module Refinery
       def submit
         if @xero_expense_claim.submittable?
           if verify_contacts && batch_create_receipt && submit_expense_claim
-            redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
+            flash[:notice] = 'Successfully submitted Expense Claim'
           end
         end
+        redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
       end
 
       def destroy
@@ -108,9 +109,7 @@ module Refinery
         true
 
       rescue ActiveRecord::StandardError => e
-        flash[:alert] = e.message
-        redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
-
+        flash[:alert] = 'Something went wrong while verifying Contacts'
         false
       end
 
@@ -137,7 +136,7 @@ module Refinery
 
         # Goes through the created records to associate the new guids
         built_receipts.each_pair do |receipt, xero_receipt|
-          if receipt.receipt_id.present?
+          if receipt.receipt_id.present? && receipt.receipt_id != '00000000-0000-0000-0000-000000000000'
             xero_receipt.guid = receipt.receipt_id
             xero_receipt.status = ::Refinery::Employees::XeroReceipt::STATUS_SUBMITTED
             xero_receipt.save!
@@ -147,9 +146,7 @@ module Refinery
         true
 
       rescue ::StandardError => e
-        flash[:alert] = e.message
-        redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
-
+        flash[:alert] = 'Something went wrong while submitting Receipts'
         false
       end
 
@@ -170,14 +167,13 @@ module Refinery
         true
 
       rescue ::StandardError => e
-        flash[:alert] = e.message
-        redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
-
+        flash[:alert] = 'Something went wrong while submitting Expense Claims'
         false
       end
 
       def client
-        @client ||= ::Refinery::Employees::XeroClient.client
+        @xero_client ||= ::Refinery::Employees::XeroClient.new
+        @xero_client.client
       end
 
     end

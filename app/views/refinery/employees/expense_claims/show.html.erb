@@ -12,7 +12,7 @@
       <th>Amount</th>
     </tr>
     <tr class="js_receipt_template" style="display: none;">
-      <td>{{ (status === 'Not-Submitted' ? '<a href="<%= refinery.employees_expense_claim_receipts_path(@xero_expense_claim) %>/'+id+'">'+contact_name+'</a>' : contact_name) }}</td>
+      <td>{{ (status === 'Not-Submitted' ? '<a href="<%= refinery.employees_expense_claim_receipts_path(@xero_expense_claim) %>/'+id+'/edit">'+contact_name+'</a>' : contact_name) }}</td>
       <td>{{ (function(){ var d = new Date(date); return [d.getDate(), d.getMonth()+1, d.getFullYear()].join('/') })() }}</td>
       <td>{{ (function(){ var d = new Date(created_at); return [d.getDate(), d.getMonth()+1, d.getFullYear()].join('/') })() }}</td>
       <td>{{no_of_items}}</td>
@@ -56,18 +56,18 @@
 <% end %>
 
 <% content_for :javascripts do %>
-  <%= javascript_include_tag 'expense_claims' %>
+  <%= javascript_include_tag 'refinery/employees/expense_claims' %>
 
-  <%= javascript_tag do %>
+  <script type="text/javascript">
     $(function(){
-    loadReceipts(<%= @xero_expense_claim.xero_receipts.to_json(methods: [:no_of_items, :contact_name]).html_safe %>);
+      loadReceipts(<%= @xero_expense_claim.xero_receipts.to_json(methods: [:no_of_items, :contact_name]).html_safe %>);
 
-    $('body').on('click', '.js_submit_expense_claim', function(){
-    console.log('here');
-    //$(this).parents('form').first().submit()
+      $('body').on('click', '.js_submit_expense_claim', function(){
+      console.log('here');
+      //$(this).parents('form').first().submit()
+      });
     });
-    });
-  <% end %>
+  </script>
 
 <% end %>
 

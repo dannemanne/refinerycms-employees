@@ -11,7 +11,7 @@ Refinery::Core::Engine.routes.draw do
     resources :annual_leaves, :only => [:index, :create, :edit, :update]
     resources :employees, :only => [:index, :show]
     resources :expense_claims do
-      resources :receipts
+      resources :receipts, only: [:new, :create, :edit, :update, :destroy]
       post :submit, on: :member
     end
   end

@@ -8,7 +8,7 @@ module Refinery
       attr_accessible :guid, :name
 
       validates :guid,    uniqueness: true, allow_blank: true
-      validates :name,    presence: true, uniqueness: true
+      validates :name,    presence: true, uniqueness: { scope: :inactive }, unless: :inactive
 
     end
   end

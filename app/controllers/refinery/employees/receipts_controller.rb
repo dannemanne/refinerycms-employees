@@ -22,6 +22,32 @@ module Refinery
         end
       end
 
+      def edit
+        unless @xero_receipt.editable?
+          redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
+        end
+      end
+
+      def update
+        if @xero_receipt.update_attributes(params[:xero_receipt])
+          @xero_expense_claim.total = @xero_expense_claim.xero_receipts(true).inject(0) { |sum, rec| sum += rec.total }
+          @xero_expense_claim.save
+          redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
+        else
+          render action: :edit
+        end
+      end
+
+      def destroy
+        if @xero_receipt.destroy
+          @xero_expense_claim.total = @xero_expense_claim.xero_receipts(true).inject(0) { |sum, rec| sum += rec.total }
+          @xero_expense_claim.save
+          redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
+        else
+          redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
+        end
+      end
+
       protected
       def find_employee
         @employee = current_refinery_user.employee
