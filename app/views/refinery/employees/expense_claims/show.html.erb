@@ -24,7 +24,23 @@
     </tr>
   </table>
 
-  <p><%= link_to 'Add Receipt', refinery.new_employees_expense_claim_receipt_path(@xero_expense_claim), class: 'button tiny' %></p>
+  <% if @xero_expense_claim.status == 'Not-Submitted' %>
+    <p><%= link_to 'Add Receipt', refinery.new_employees_expense_claim_receipt_path(@xero_expense_claim), class: 'button tiny' %></p>
+  <% end %>
+
+  <h4>Scanned Receipts</h4>
+  <% if @xero_expense_claim.xero_expense_claim_attachments.any? %>
+    <% @xero_expense_claim.xero_expense_claim_attachments.each do |xero_expense_claim_attachment| %>
+      <p><%= link_to "Download #{ xero_expense_claim_attachment.resource.file_name }", xero_expense_claim_attachment.resource.url %></p>
+    <% end %>
+  <% else %>
+    <p class="italic">No Scanned Receipts attached yet.</p>
+  <% end %>
+
+  <% if @xero_expense_claim.status == 'Not-Submitted' %>
+    <p><%= link_to 'Add Scanned Receipts', refinery.add_resource_employees_expense_claim_path(@xero_expense_claim), remote: true, class: 'button tiny' %></p>
+  <% end %>
+
   <div class="row">
     <% if @xero_expense_claim.status == 'Not-Submitted' %>
       <% if @xero_expense_claim.submittable? %>
@@ -53,6 +69,10 @@
     <% end %>
   </div>
   
+<% end %>
+
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css' %>
 <% end %>
 
 <% content_for :javascripts do %>

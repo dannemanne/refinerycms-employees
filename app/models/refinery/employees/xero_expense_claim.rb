@@ -9,6 +9,7 @@ module Refinery
 
       belongs_to :employee
       has_many :xero_receipts,     dependent: :destroy
+      has_many :xero_expense_claim_attachments, dependent: :destroy
 
       attr_accessible :guid, :status, :total, :amount_due, :amount_paid, :payment_due_date, :reporting_date, :updated_date_utc, :description
 

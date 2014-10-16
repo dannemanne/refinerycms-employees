@@ -39,7 +39,7 @@ module Refinery
 
       def submit
         if @xero_expense_claim.submittable?
-          if verify_contacts && batch_create_receipt && submit_expense_claim
+          if verify_contacts && batch_create_receipt && attach_scanned_receipts && submit_expense_claim
             flash[:notice] = 'Successfully submitted Expense Claim'
           end
         end
@@ -54,6 +54,19 @@ module Refinery
           flash[:alert] = 'Cannot delete a Submitted Expense Claim'
           redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
         end
+      end
+
+      def add_resource
+        @resource = ::Refinery::Resource.new
+      end
+
+      def create_resource
+        if create_and_associate_resource
+          flash[:notice] = 'Successfully added Scanned Receipts'
+        else
+          flash[:alert] = 'Failed to add Scanned Receipts'
+        end
+        redirect_to refinery.employees_expense_claim_path(@xero_expense_claim)
       end
 
       protected
@@ -143,10 +156,34 @@ module Refinery
           end
         end
 
-        true
+        # Only return true if all receipts have a guid
+        @xero_expense_claim.xero_receipts(true).all? { |xr| xr.guid.present? }
 
       rescue ::StandardError => e
         flash[:alert] = 'Something went wrong while submitting Receipts'
+        false
+      end
+
+      def attach_scanned_receipts
+        receipt_guid = @xero_expense_claim.xero_receipts.first.guid
+        @xero_expense_claim.xero_expense_claim_attachments.each do |xero_expense_claim_attachment|
+          if xero_expense_claim_attachment.guid.blank? # Has not been submitted yet
+            attachment = client.Receipt.attach_file(
+                receipt_guid,
+                xero_expense_claim_attachment.resource.file.name,
+                xero_expense_claim_attachment.resource.file.tempfile.path,
+                xero_expense_claim_attachment.resource.file.mime_type)
+            if attachment.attachment_id.present? && attachment.attachment_id != '00000000-0000-0000-0000-000000000000'
+              xero_expense_claim_attachment.guid = attachment.attachment_id
+              xero_expense_claim_attachment.save!
+            end
+          end
+        end
+
+        @xero_expense_claim.xero_expense_claim_attachments(true).all? { |a| a.guid.present? }
+
+      rescue ::StandardError => e
+        flash[:alert] = 'Something went wrong while attaching scanned receipts'
         false
       end
 
@@ -174,6 +211,21 @@ module Refinery
       def client
         @xero_client ||= ::Refinery::Employees::XeroClient.new
         @xero_client.client
+      end
+
+      def create_and_associate_resource
+        begin
+          XeroExpenseClaimAttachment.transaction do
+            @resources = ::Refinery::Resource.create_resources(params[:resource])
+            @resource = @resources.detect { |r| r.valid? } || (raise ::ActiveRecord::RecordNotSaved)
+
+            @xero_expense_claim.xero_expense_claim_attachments.create!(resource_id: @resource.id)
+
+            true
+          end
+        rescue ::ActiveRecord::RecordNotSaved
+          false
+        end
       end
 
     end

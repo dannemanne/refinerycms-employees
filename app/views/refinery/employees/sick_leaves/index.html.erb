@@ -45,4 +45,8 @@
   </table>
 <% end %>
 
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css' %>
+<% end %>
+
 <%= render '/refinery/content_page' %>

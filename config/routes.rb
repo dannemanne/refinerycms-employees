@@ -12,7 +12,10 @@ Refinery::Core::Engine.routes.draw do
     resources :employees, :only => [:index, :show]
     resources :expense_claims do
       resources :receipts, only: [:new, :create, :edit, :update, :destroy]
-      post :submit, on: :member
+      member do
+        get :add_resource
+        post :create_resource, :submit
+      end
     end
   end
 

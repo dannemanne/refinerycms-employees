@@ -56,7 +56,7 @@
         <tr>
           <td><%= link_to expense_claim.description, refinery.employees_expense_claim_path(expense_claim) %></td>
           <td><%= expense_claim.status %></td>
-          <td><%= expense_claim.updated_date_utc.strftime('%-d %b, %Y') %></td>
+          <td><%= expense_claim.updated_date_utc.try(:strftime, '%-d %b, %Y') %></td>
           <td><%= expense_claim.payment_due_date %></td>
           <td><%= expense_claim.amount_paid %></td>
           <td><%= expense_claim.amount_due %></td>
@@ -71,6 +71,10 @@
     <% end %>
   </table>
 
+<% end %>
+
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css' %>
 <% end %>
 
 <%= render '/refinery/content_page' %>
