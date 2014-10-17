@@ -82,6 +82,11 @@ module Refinery
         @employee_name ||= employee.try(:full_name)
       end
 
+      def matches_date?(date)
+        date == start_date ||
+            (end_date.present? && date > start_date && date <= end_date)
+      end
+
     end
   end
 end

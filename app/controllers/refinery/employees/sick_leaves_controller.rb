@@ -15,7 +15,7 @@ module Refinery
       def create
         @sick_leave = @employee.sick_leaves.build(params[:sick_leave])
         if @sick_leave.save
-          flash[:info] = 'Sick Leave successfully registered.'
+          flash[:notice] = 'Sick Leave successfully registered.'
           redirect_to refinery.employees_sick_leaves_path
         else
           find_all_sick_leaves
@@ -32,12 +32,30 @@ module Refinery
 
       def update
         if @sick_leave.update_attributes(params[:sick_leave])
-          flash[:info] = 'Sick Leave successfully updated.'
+          flash[:notice] = 'Sick Leave successfully updated.'
           redirect_to refinery.employees_sick_leaves_path
         else
           present(@page)
           render action: :edit
         end
+      end
+
+      def extend
+        if @sick_leave.update_attributes(end_date: Date.today)
+          flash[:notice] = 'Sick Leave successfully extended.'
+        else
+          flash[:alert] = 'Failed to extend Sick Leave.'
+        end
+        redirect_to refinery.employees_sick_leaves_path
+      end
+
+      def destroy
+        if @sick_leave.destroy
+          flash[:notice] = 'Successfully removed the Sick Leave'
+        else
+          flash[:alert] = 'Failed to remove the Sick Leave'
+        end
+        redirect_to refinery.employees_sick_leaves_path
       end
 
       def add_note

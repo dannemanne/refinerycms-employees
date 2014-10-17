@@ -47,6 +47,18 @@ module Refinery
         @_cec ||= employment_contracts.where(end_date: nil).first
       end
 
+      def recent_sick_leave(search_weekdays = 3)
+        return @_rsl if defined? @_rsl
+
+        d = Date.today
+        while search_weekdays > 0
+          d -= 1.day
+          search_weekdays -= 1 unless d.saturday? or d.sunday?
+        end
+
+        @_rsl = sick_leaves.where('(end_date IS NOT NULL AND end_date >= :date) OR start_date >= :date', date: d).order('start_date DESC').first
+      end
+
     end
   end
 end

@@ -1,8 +1,9 @@
 <% content_for :body do %>
+  <h4>Register Sick Leave</h4>
 
-  <%= render 'form', sick_leave: ::Refinery::Employees::SickLeave.new %>
+  <%= render 'quick_form', sick_leave: ::Refinery::Employees::SickLeave.new %>
 
-  <h4 class="t2">Previously registered Sick Leave</h4>
+  <h4 class="t2">All of your registered Sick Leave occasions</h4>
 
   <table>
     <thead>
@@ -29,6 +30,7 @@
             <% end %>
           </td>
           <td><%= link_to 'Edit', refinery.edit_employees_sick_leave_path(sick_leave) %></td>
+          <td><%= link_to 'Remove', refinery.employees_sick_leave_path(sick_leave), method: :delete %></td>
         </tr>
       <% end %>
     </tbody>
