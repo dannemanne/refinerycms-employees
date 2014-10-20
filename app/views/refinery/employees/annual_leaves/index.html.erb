@@ -20,7 +20,10 @@
           <td><%= annual_leave.start_date %></td>
           <td><%= annual_leave.end_date %></td>
           <td><%= annual_leave.number_of_days %> day(s)</td>
-          <td><%= link_to 'Edit', refinery.edit_employees_annual_leave_path(annual_leave) %></td>
+          <td>
+            <%= link_to 'Edit', refinery.edit_employees_annual_leave_path(annual_leave) %>
+            <%= link_to 'Remove', refinery.employees_annual_leave_path(annual_leave), method: :delete %>
+          </td>
         </tr>
       <% end %>
     </tbody>

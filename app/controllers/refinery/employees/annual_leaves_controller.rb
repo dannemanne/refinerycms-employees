@@ -41,6 +41,15 @@ module Refinery
         end
       end
 
+      def destroy
+        if @annual_leave.destroy
+          flash[:notice] = 'Successfully removed the Annual Leave'
+        else
+          flash[:alert] = 'Failed to remove the Annual Leave'
+        end
+        redirect_to refinery.employees_annual_leaves_path
+      end
+
       protected
       def find_employee
         @employee = current_refinery_user.employee

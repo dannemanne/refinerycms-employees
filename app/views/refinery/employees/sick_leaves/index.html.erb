@@ -29,8 +29,10 @@
               <%= link_to 'Add Note', refinery.add_note_employees_sick_leave_path(sick_leave) %>
             <% end %>
           </td>
-          <td><%= link_to 'Edit', refinery.edit_employees_sick_leave_path(sick_leave) %></td>
-          <td><%= link_to 'Remove', refinery.employees_sick_leave_path(sick_leave), method: :delete %></td>
+          <td>
+            <%= link_to 'Edit', refinery.edit_employees_sick_leave_path(sick_leave) %>
+            <%= link_to 'Remove', refinery.employees_sick_leave_path(sick_leave), method: :delete %>
+          </td>
         </tr>
       <% end %>
     </tbody>

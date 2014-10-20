@@ -9,7 +9,7 @@ Refinery::Core::Engine.routes.draw do
         put :extend
       end
     end
-    resources :annual_leaves, :only => [:index, :create, :edit, :update]
+    resources :annual_leaves, :only => [:index, :create, :edit, :update, :destroy]
     resources :employees, :only => [:index, :show]
     resources :expense_claims do
       resources :receipts, only: [:new, :create, :edit, :update, :destroy]
