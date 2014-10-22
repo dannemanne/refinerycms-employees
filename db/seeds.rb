@@ -10,9 +10,23 @@ Refinery::I18n.frontend_locales.each do |lang|
     end
   end
 
+  url = "/employees"
+  if defined?(Refinery::Page) && Refinery::Page.where(:link_url => url).empty?
+    page = Refinery::Page.create(
+        :title => 'Employees',
+        :link_url => url,
+        :deletable => false,
+        :menu_match => "^#{url}(\/|\/.+?|)$"
+    )
+    Refinery::Pages.default_parts.each_with_index do |default_page_part, index|
+      page.parts.create(:title => default_page_part, :body => nil, :position => index)
+    end
+  end
+
   url = "/employees/employees"
   if defined?(Refinery::Page) && Refinery::Page.where(:link_url => url).empty?
     page = Refinery::Page.create(
+      :parent_id => Refinery::Page.where(:link_url => '/employees').first.try(:id),
       :title => 'Employee Directory',
       :link_url => url,
       :deletable => false,
@@ -26,6 +40,7 @@ Refinery::I18n.frontend_locales.each do |lang|
   url = "/employees/sick_leaves"
   if defined?(Refinery::Page) && Refinery::Page.where(:link_url => url).empty?
     page = Refinery::Page.create(
+        :parent_id => Refinery::Page.where(:link_url => '/employees').first.try(:id),
         :title => 'Sick Leave',
         :link_url => url,
         :deletable => false,
@@ -39,6 +54,7 @@ Refinery::I18n.frontend_locales.each do |lang|
   url = "/employees/annual_leaves"
   if defined?(Refinery::Page) && Refinery::Page.where(:link_url => url).empty?
     page = Refinery::Page.create(
+        :parent_id => Refinery::Page.where(:link_url => '/employees').first.try(:id),
         :title => 'Annual Leave',
         :link_url => url,
         :deletable => false,
@@ -49,9 +65,10 @@ Refinery::I18n.frontend_locales.each do |lang|
     end
   end
 
-  url = '/employees/expense_claims'
+  url = "/employees/expense_claims"
   if defined?(Refinery::Page) && Refinery::Page.where(:link_url => url).empty?
     page = Refinery::Page.create(
+        :parent_id => Refinery::Page.where(:link_url => '/employees').first.try(:id),
         :title => 'Expense Claims',
         :link_url => url,
         :deletable => false,
