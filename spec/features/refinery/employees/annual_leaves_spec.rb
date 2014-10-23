@@ -44,6 +44,23 @@ describe Refinery do
         end
       end
 
+      describe "removing annual leave" do
+        context "when it belongs to the logged in user" do
+          let(:annual_leave) { FactoryGirl.create(:annual_leave, employee: employee) }
+          it "should succeed" do
+            expect( annual_leave.employee.user ).to eq logged_in_user
+
+            visit refinery.employees_annual_leaves_path
+
+            page.should have_content(annual_leave.start_date)
+            click_link "Remove"
+
+            page.should_not have_content(annual_leave.start_date)
+            Refinery::Employees::AnnualLeave.count.should eq 0
+          end
+        end
+      end
+
     end
   end
 end
