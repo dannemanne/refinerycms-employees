@@ -1,8 +1,10 @@
 <% content_for :body do %>
+  <%= link_to 'Back to All Expense Claims', refinery.employees_expense_claims_path, class: 'button tiny round' %>
 
   <h2><%= @xero_expense_claim.description %></h2>
 
-  <table class="js_receipts_table">
+  <table class="js_receipts_data_table">
+    <thead>
     <tr>
       <th>From</th>
       <th>Receipt Date</th>
@@ -11,17 +13,37 @@
       <th>Status</th>
       <th>Amount</th>
     </tr>
-    <tr class="js_receipt_template" style="display: none;">
-      <td>{{ (status === 'Not-Submitted' ? '<a href="<%= refinery.employees_expense_claim_receipts_path(@xero_expense_claim) %>/'+id+'/edit">'+contact_name+'</a>' : contact_name) }}</td>
-      <td>{{ (function(){ var d = new Date(date); return [d.getDate(), d.getMonth()+1, d.getFullYear()].join('/') })() }}</td>
-      <td>{{ (function(){ var d = new Date(created_at); return [d.getDate(), d.getMonth()+1, d.getFullYear()].join('/') })() }}</td>
-      <td>{{no_of_items}}</td>
-      <td>{{status}}</td>
-      <td>{{total}} HKD</td>
+    </thead>
+
+    <tfoot>
+    <tr>
+      <th>From</th>
+      <th>Receipt Date</th>
+      <th>Receipt Registered</th>
+      <th>Items</th>
+      <th>Status</th>
+      <th>Amount</th>
     </tr>
-    <tr class="js_no_receipt_node">
-      <td colspan="6" class="italic">No Receipts registered.</td>
-    </tr>
+    </tfoot>
+
+    <tbody>
+    <% @xero_expense_claim.xero_receipts.each do |xero_receipt| %>
+      <tr>
+        <td>
+          <% if xero_receipt.status == 'Not-Submitted' %>
+            <%= link_to xero_receipt.contact_name, refinery.edit_employees_expense_claim_receipt_path(@xero_expense_claim, xero_receipt) %>
+          <% else %>
+            <%= link_to xero_receipt.contact_name, refinery.employees_expense_claim_receipt_path(@xero_expense_claim, xero_receipt) %>
+          <% end %>
+        </td>
+        <td><%= xero_receipt.date %></td>
+        <td><%= xero_receipt.created_at %></td>
+        <td><%= xero_receipt.no_of_items %></td>
+        <td><%= xero_receipt.status %></td>
+        <td><%= xero_receipt.total %> HKD</td>
+      </tr>
+    <% end %>
+    </tbody>
   </table>
 
   <% if @xero_expense_claim.status == 'Not-Submitted' %>
@@ -68,27 +90,12 @@
       </div>
     <% end %>
   </div>
-  
+
 <% end %>
 
 <% content_for :stylesheets do %>
   <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css' %>
 <% end %>
 
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'refinery/employees/expense_claims' %>
-
-  <script type="text/javascript">
-    $(function(){
-      loadReceipts(<%= @xero_expense_claim.xero_receipts.to_json(methods: [:no_of_items, :contact_name]).html_safe %>);
-
-      $('body').on('click', '.js_submit_expense_claim', function(){
-      console.log('here');
-      //$(this).parents('form').first().submit()
-      });
-    });
-  </script>
-
-<% end %>
 
 <%= render '/refinery/content_page' %>

@@ -137,3 +137,12 @@ en:
         country: Country
         holiday_date: Holiday Date
         half_day: Half day?
+      'refinery/employees/xero_receipt':
+        contact_name: From
+        date: Date
+        reference: Reference
+      'refinery/employees/xero_line_item':
+        description: Description
+        xero_account_id: Account
+        quantity: Quantity
+        unit_amount: Amount
