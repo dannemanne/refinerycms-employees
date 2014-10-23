@@ -78,7 +78,7 @@ module Refinery
           end
 
           if (country = employee.current_employment_contract.try(:country)).present? &&
-              (ph = ::Refinery::Employees::PublicHoliday.where('country = ? AND holiday_date = ?', country, start_date)).first.present?
+              (ph = ::Refinery::Employees::PublicHoliday.where('country = ? AND holiday_date = ?', country, start_date).first).present?
             if ph.half_day
               self.number_of_days = 0.5
             else
