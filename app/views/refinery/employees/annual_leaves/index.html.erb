@@ -46,7 +46,7 @@
   <% if (employee = current_refinery_user.employee).present? && (employment_contract = employee.current_employment_contract).present? %>
     <section>
       <h5>
-        <%= employment_contract.start_date.strftime('%d %B, %Y') %> - <%= employment_contract.end_date.try(:strftime, '%d %B, %Y') || 'Present' %><br/>
+        <%= employment_contract.start_date.strftime('%d %B, %Y') %><br/>
         <% if employment_contract.vacation_days_per_year > 0 %><small><%= employment_contract.vacation_days_per_year %> days per year.</small><% end %>
       </h5>
 
