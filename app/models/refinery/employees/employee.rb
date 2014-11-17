@@ -59,6 +59,15 @@ module Refinery
         @_rsl = sick_leaves.where('(end_date IS NOT NULL AND end_date >= :date) OR start_date >= :date', date: d).order('start_date DESC').first
       end
 
+      class << self
+        # Scope to get all employees with active employment contracts
+        def current
+          joins(:employment_contracts).
+              where("#{Refinery::Employees::EmploymentContract.table_name}.start_date <= :today "<<
+                        "AND (#{Refinery::Employees::EmploymentContract.table_name}.end_date IS NULL OR #{Refinery::Employees::EmploymentContract.table_name}.end_date >= :today)", today: Date.today)
+        end
+      end
+
     end
   end
 end
