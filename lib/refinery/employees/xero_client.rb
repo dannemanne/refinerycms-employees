@@ -91,6 +91,7 @@ module Refinery
                 pem = Tempfile.new(['privatekey', '.pem'])
                 pem.write xero_api_keyfile.key_content
                 pem.rewind
+                pem.path
               end
             end
       end
